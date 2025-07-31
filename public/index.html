@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEMO - Dashboard Aplikasi</title>
+    <link rel="stylesheet" href="/public/dist/output.css" type="text/css" media="all" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Anti-Inspect Element Script -->
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', event => {
+            if (event.keyCode === 123 || // F12
+                (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'i')) || // Ctrl+Shift+I
+                (event.ctrlKey && event.shiftKey && (event.key === 'J' || event.key === 'j')) || // Ctrl+Shift+J
+                (event.ctrlKey && event.shiftKey && (event.key === 'C' || event.key === 'c')) || // Ctrl+Shift+C
+                (event.ctrlKey && (event.key === 'U' || event.key === 'u')) // Ctrl+U
+            ) {
+                event.preventDefault();
+            }
+        });
+    </script>
+    
+    <script>
+        function updateAdminProfile(user) {
+            const adminNameElement = document.getElementById('admin-name');
+            const adminUsernameElement = document.getElementById('admin-username');
+            const adminInitialElement = document.getElementById('admin-initial');
+
+            if (adminNameElement && user.name) {
+                adminNameElement.textContent = user.name;
+            }
+            
+            if (adminUsernameElement && user.username) {
+                adminUsernameElement.textContent = user.username;
+            }
+            
+            if (adminInitialElement && user.name) {
+                adminInitialElement.textContent = user.name.charAt(0).toUpperCase();
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen bg-gray-50 dark:bg-gray-900 font-sans lg:flex text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div id="sidebar-overlay" class="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden hidden"></div>
+
+    <div id="sidebar" class="fixed inset-y-0 left-0 z-30 w-64 bg-white dark:bg-gray-800 shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:relative">
+        <div class="flex items-center justify-between h-16 px-6 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center">
+                <div class="w-8 h-8 bg-blue-600 dark:bg-blue-500 rounded-lg flex items-center justify-center">
+                    <i data-lucide="store" class="h-5 w-5 text-white"></i>
+                </div>
+                <span class="ml-3 text-xl font-semibold text-gray-900 dark:text-white">ZuranStore</span>
+            </div>
+            <button id="sidebar-close" class="lg:hidden p-1 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300 dark:hover:text-gray-100">
+                <i data-lucide="x" class="h-6 w-6"></i>
+            </button>
+        </div>
+
+        <nav class="mt-6 px-3">
+            <ul class="space-y-1">
+                <li>
+                    <button data-page="dashboard" class="nav-item w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-150 ease-in-out bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 border-r-2 border-blue-600 dark:border-blue-500">
+                        <i data-lucide="home" class="h-5 w-5 mr-3 text-gray-700 dark:text-gray-300"></i>
+                        Dashboard
+                    </button>
+                </li>
+                <li>
+                    <button data-page="products" class="nav-item w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-150 ease-in-out text-gray-700 dark:text-gray-300 hover:bg-gray-50 hover:text-gray-900 dark:hover:bg-gray-700/50 dark:hover:text-white">
+                        <i data-lucide="shopping-bag" class="h-5 w-5 mr-3 text-gray-700 dark:text-gray-300"></i>
+                        Produk
+                    </button>
+                </li>
+                <li>
+                    <button data-page="customers" class="nav-item w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-150 ease-in-out text-gray-700 dark:text-gray-300 hover:bg-gray-50 hover:text-gray-900 dark:hover:bg-gray-700/50 dark:hover:text-white">
+                        <i data-lucide="users" class="h-5 w-5 mr-3 text-gray-700 dark:text-gray-300"></i>
+                        Pelanggan
+                    </button>
+                </li>
+                <li>
+                    <button data-page="orders" class="nav-item w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-150 ease-in-out text-gray-700 dark:text-gray-300 hover:bg-gray-50 hover:text-gray-900 dark:hover:bg-gray-700/50 dark:hover:text-white">
+                        <i data-lucide="shopping-cart" class="h-5 w-5 mr-3 text-gray-700 dark:text-gray-300"></i>
+                        Pesanan
+                    </button>
+                </li>
+                <li>
+                    <button data-page="broadcast" class="nav-item w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-150 ease-in-out text-gray-700 dark:text-gray-300 hover:bg-gray-50 hover:text-gray-900 dark:hover:bg-gray-700/50 dark:hover:text-white">
+                        <i data-lucide="radio" class="h-5 w-5 mr-3 text-gray-700 dark:text-gray-300"></i>
+                        Broadcast
+                    </button>
+                </li>
+                <li>
+                    <button data-page="admin" class="nav-item w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-150 ease-in-out text-gray-700 dark:text-gray-300 hover:bg-gray-50 hover:text-gray-900 dark:hover:bg-gray-700/50 dark:hover:text-white">
+                        <i data-lucide="shield" class="h-5 w-5 mr-3 text-gray-700 dark:text-gray-300"></i>
+                        Admin
+                    </button>
+                </li>
+                <li>
+                    <button data-page="bot-connection" class="nav-item w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-150 ease-in-out text-gray-700 dark:text-gray-300 hover:bg-gray-50 hover:text-gray-900 dark:hover:bg-gray-700/50 dark:hover:text-white">
+                        <i data-lucide="cpu" class="h-5 w-5 mr-3 text-gray-700 dark:text-gray-300"></i>
+                        Koneksi Bot
+                    </button>
+                </li>
+                <li>
+                    <button data-page="settings" class="nav-item w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-150 ease-in-out text-gray-700 dark:text-gray-300 hover:bg-gray-50 hover:text-gray-900 dark:hover:bg-gray-700/50 dark:hover:text-white">
+                        <i data-lucide="settings" class="h-5 w-5 mr-3 text-gray-700 dark:text-gray-300"></i>
+                        Pengaturan
+                    </button>
+                </li>
+                
+                <li>
+                    <button data-page="notifications" class="nav-item w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                        <div class="flex items-center">
+                            <i data-lucide="bell" class="h-5 w-5 mr-3 text-gray-700 dark:text-gray-300"></i>
+                            <span>Notifikasi</span>
+                        </div>
+                        <span id="sidebar-notification-badge" class="h-5 w-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center hidden">
+                            0
+                        </span>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="absolute bottom-0 left-0 right-0">
+          <div id="user-profile-button" class="flex items-center p-4 border-t border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150">
+              <div class="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                  <span id="admin-initial" class="text-sm font-medium text-gray-700 dark:text-gray-200">A</span>
+              </div>
+              <div class="ml-3">
+                  <p id="admin-name" class="text-sm font-medium text-gray-900 dark:text-white">Admin</p>
+                  <p id="admin-username" class="text-xs text-gray-500 dark:text-gray-400">admin@pulsaapp.com</p>
+              </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="lg:flex-1 flex flex-col h-screen">
+        <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between flex-shrink-0">
+            <div class="flex items-center">
+                <button id="sidebar-toggle" class="lg:hidden p-2 -ml-2 rounded-md text-gray-500 dark:text-gray-400">
+                    <i data-lucide="menu" class="h-6 w-6"></i>
+                </button>
+                <h1 id="page-title" class="ml-4 text-xl font-semibold text-gray-900 dark:text-white">Dashboard</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <button id="dark-mode-toggle" class="dark-mode-toggle p-2 rounded-md text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
+                    <svg class="moon-icon h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                    <svg class="sun-icon h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+    
+        <main class="p-4 lg:p-8 flex-1 overflow-y-auto dark:bg-gray-900">
+            <div id="dashboard-page" class="page-content"></div>
+            <div id="products-page" class="page-content" style="display: none;"></div>
+            <div id="customers-page" class="page-content" style="display: none;"></div>
+            <div id="orders-page" class="page-content" style="display: none;"></div>
+            <div id="broadcast-page" class="page-content" style="display: none;"></div>
+            <div id="admin-page" class="page-content" style="display: none;"></div>
+            <div id="bot-connection-page" class="page-content" style="display: none;"></div>
+            <div id="settings-page" class="page-content" style="display: none;"></div>
+            <div id="notifications-page" class="page-content" style="display: none;"></div>
+        </main>
+    </div>
+
+    <div id="modal-container"></div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <!-- Core utilities and main app logic first -->
+    <script src="/public/js/darkmode.js"></script>
+    <script src="/public/js/modal.js"></script> 
+    <script src="/public/js/dummy-data.js"></script>
+    <script src="/public/js/api.js"></script>
+    <script src="/public/js/main.js"></script>
+
+    <!-- Page-specific modules -->
+    <script src="/public/js/dashboard.js"></script>
+    <script src="/public/js/products.js"></script>
+    <script src="/public/js/customers.js"></script>
+    <script src="/public/js/orders.js"></script>
+    <script src="/public/js/broadcast.js"></script>
+    <script src="/public/js/admin.js"></script>
+    <script src="/public/js/bot-connection.js"></script>
+    <script src="/public/js/settings.js"></script>
+    <script src="/public/js/notifications.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize dark mode toggle functionality
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('click', function() {
+                    DarkMode.toggle();
+                });
+            }
+            // Initialize the main application
+            window.app.init();
+        });
+    </script>
+</body>
+</html>

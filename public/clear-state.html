@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Bot Connection State</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { max-width: 500px; margin: 0 auto; }
+        .button { background: #dc3545; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        .button:hover { background: #c82333; }
+        .success { color: green; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Clear Bot Connection State</h1>
+        <p>Jika status bot masih menunjukkan "Menghubungkan..." setelah restart server, klik tombol di bawah untuk reset status:</p>
+        
+        <button class="button" onclick="clearBotState()">Clear Bot State</button>
+        
+        <div id="result"></div>
+        
+        <hr style="margin: 20px 0;">
+        
+        <h3>Manual Steps:</h3>
+        <ol>
+            <li>Buka Developer Tools (F12)</li>
+            <li>Pergi ke tab "Application" atau "Storage"</li>
+            <li>Pilih "Local Storage" → domain Anda</li>
+            <li>Hapus item "botAppState"</li>
+            <li>Refresh halaman</li>
+        </ol>
+    </div>
+
+    <script>
+        function clearBotState() {
+            try {
+                // Clear localStorage
+                localStorage.removeItem('botAppState');
+                
+                // Clear sessionStorage juga jika ada
+                sessionStorage.clear();
+                
+                document.getElementById('result').innerHTML = '<div class="success">✅ Bot state berhasil dihapus! Silakan refresh halaman dashboard.</div>';
+                
+                // Auto refresh setelah 2 detik
+                setTimeout(() => {
+                    if (window.opener) {
+                        window.opener.location.reload();
+                        window.close();
+                    } else {
+                        window.location.href = '/';
+                    }
+                }, 2000);
+                
+            } catch (error) {
+                document.getElementById('result').innerHTML = '<div style="color: red;">❌ Error: ' + error.message + '</div>';
+            }
+        }
+    </script>
+</body>
+</html>

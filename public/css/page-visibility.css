@@ -1,0 +1,9 @@
+/* Default state for page content */
+.page-content {
+    display: none;
+}
+
+/* State for the currently active page */
+.page-content.active {
+    display: block;
+}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEMO - Login Dashboard</title>
+    <link rel="stylesheet" href="/public/dist/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Anti-Inspect Element Script -->
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', event => {
+            if (event.keyCode === 123 || // F12
+                (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'i')) || // Ctrl+Shift+I
+                (event.ctrlKey && event.shiftKey && (event.key === 'J' || event.key === 'j')) || // Ctrl+Shift+J
+                (event.ctrlKey && event.shiftKey && (event.key === 'C' || event.key === 'c')) || // Ctrl+Shift+C
+                (event.ctrlKey && (event.key === 'U' || event.key === 'u')) // Ctrl+U
+            ) {
+                event.preventDefault();
+            }
+        });
+    </script>
+    
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        .animate-pulse-slow { animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        .animate-pulse-delay { animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; animation-delay: 1s; }
+        @keyframes pulse { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.4; } }
+        .loading-spinner { border: 2px solid transparent; border-top: 2px solid white; border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-indigo-950 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-100 dark:bg-blue-900/30 rounded-full opacity-20 animate-pulse-slow"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-100 dark:bg-indigo-900/30 rounded-full opacity-20 animate-pulse-delay"></div>
+    </div>
+
+    <div class="relative min-h-screen flex items-center justify-center px-4 py-6 sm:p-4">
+        <div class="w-full max-w-md mx-auto">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-700 dark:to-indigo-800 px-6 py-6 sm:px-8 sm:py-8 text-center relative">
+                    <div style="position: absolute; top: 1rem; right: 1rem; z-index: 10;">
+                        <button id="dark-mode-toggle" class="p-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors duration-200">
+                            <svg class="moon-icon h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                            <svg class="sun-icon h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        </button>
+                    </div>
+                    <div class="flex justify-center mb-4">
+                        <div class="bg-white/20 p-3 rounded-full">
+                            <div class="flex space-x-1">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a1 1 0 001-1V4a1 1 0 00-1-1H8a1 1 0 00-1 1v16a1 1 0 001 1z"></path></svg>
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <h1 class="text-xl sm:text-2xl font-bold text-white mb-2">DEMO Dashboard</h1>
+                    <p class="text-blue-100 text-sm">Pulsa & Top-up E-wallet</p>
+                </div>
+
+                <div class="px-6 py-6 sm:px-8 sm:py-8">
+                    <div class="text-center mb-8">
+                        <h2 class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white mb-2">Masuk ke Akun Demo</h2>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Gunakan <code class="bg-gray-200 dark:bg-gray-600 px-1 py-0.5 rounded">demo</code> / <code class="bg-gray-200 dark:bg-gray-600 px-1 py-0.5 rounded">demo</code></p>
+                    </div>
+
+                    <form id="loginForm" class="space-y-6">
+                        <div>
+                            <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Username</label>
+                            <div class="relative"><input id="username" name="username" type="text" class="form-input block w-full pl-4 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700" value="demo" required /></div>
+                        </div>
+
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
+                            <div class="relative"><input id="password" name="password" type="password" class="form-input block w-full pl-4 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700" value="demo" required />
+                                <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center"><svg id="eyeIcon" class="h-5 w-5 text-gray-400 dark:text-gray-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg><svg id="eyeOffIcon" class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path></svg></button>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" id="submitBtn" class="btn-primary group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <div id="buttonContent" class="flex items-center">Masuk ke Dashboard</div>
+                            <div id="loadingContent" class="hidden items-center"><div class="loading-spinner mr-2"></div>Memproses...</div>
+                        </button>
+                    </form>
+                </div>
+                <div class="px-6 py-4 sm:px-8 bg-gray-50 dark:bg-gray-700 border-t border-gray-100 dark:border-gray-600">
+                    <p class="text-center text-xs text-gray-500 dark:text-gray-400">© 2025 Demo Dashboard Penjualan.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load JavaScript modules -->
+    <script src="/public/js/dummy-data.js"></script>
+    <script src="/public/js/api.js"></script>
+    <script src="/login/js/darkmode.js"></script>
+    <script src="/login/js/main.bundle.js"></script>
+</body>
+</html>
